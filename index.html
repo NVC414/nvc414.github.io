@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Components Image Browser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #4a9eff;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .category {
+            margin-bottom: 40px;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .category h2 {
+            color: #4a9eff;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-transform: capitalize;
+            border-bottom: 2px solid #4a9eff;
+            padding-bottom: 10px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .image-item {
+            background-color: #3a3a3a;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(74, 158, 255, 0.3);
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-item img:hover {
+            opacity: 0.8;
+        }
+
+        .image-name {
+            padding: 15px;
+            text-align: center;
+            font-weight: 500;
+            color: #cccccc;
+            font-size: 0.9em;
+        }
+
+        .stats {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            color: #cccccc;
+        }
+
+        .stats span {
+            color: #4a9eff;
+            font-weight: bold;
+        }
+
+        /* Modal for full-size image viewing */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            margin-top: 2%;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #4a9eff;
+        }
+
+        @media (max-width: 768px) {
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PC Components Image Browser</h1>
+        
+        <div class="stats">
+            <p>Browse through our collection of <span id="totalImages">0</span> PC component images across <span>6</span> categories</p>
+        </div>
+
+        <div id="imageContainer">
+            <!-- Images will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Modal for full-size image viewing -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // Image catalog organized by category
+        const imageCategories = {
+            'case': [
+                'case_01.jpg', 'case_02.jpg', 'case_03.jpg', 'case_04.jpg',
+                'case_05.jpg', 'case_06.jpg', 'case_07.jpg', 'case_08.jpg'
+            ],
+            'cpu': [
+                'am4_01.jpg', 'am4_02.jpg', 'am4_03.jpg', 'am5_01.jpg',
+                'am5_02.jpg', 'am5_03.jpg', 'LGA1151_01.jpg', 'LGA1151_02.jpg',
+                'LGA1700_01.jpg', 'LGA1700_02.jpg'
+            ],
+            'memory': [
+                'ddr4_01.jpg', 'ddr4_02.jpg', 'ddr4_03.jpg', 'ddr4_04.jpg',
+                'ddr5_01.jpg', 'ddr5_02.jpg', 'ddr5_03.jpg', 'ddr5_04.jpg'
+            ],
+            'motherboard': [
+                'am4_01.jpg', 'am4_02.jpg', 'am4_03.jpg', 'am5_01.jpg',
+                'am5_02.jpg', 'am5_03.jpg', 'LGA1151_01.jpg', 'LGA1151_02.jpg',
+                'LGA1151_03.jpg', 'LGA1700_01.jpg', 'LGA1700_02.jpg', 'LGA1700_03.jpg'
+            ],
+            'power-supply': [
+                'psu_01.jpg', 'psu_02.jpg', 'psu_03.jpg', 'psu_04.jpg',
+                'psu_05.jpg', 'psu_06.jpg'
+            ],
+            'video-card': [
+                'nvidia_01.jpg', 'nvidia_02.jpg', 'nvidia_03.jpg', 'nvidia_04.jpg',
+                'nvidia_05.jpg', 'nvidia_06.jpg', 'nvidia_07.jpg', 'radeon_01.jpg',
+                'radeon_02.jpg', 'radeon_03.jpg', 'radeon_04.jpg', 'radeon_05.jpg'
+            ]
+        };
+
+        // Calculate total images
+        const totalImages = Object.values(imageCategories).flat().length;
+        document.getElementById('totalImages').textContent = totalImages;
+
+        // Generate HTML for all categories
+        function generateImageBrowser() {
+            const container = document.getElementById('imageContainer');
+            
+            Object.entries(imageCategories).forEach(([category, images]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                
+                categoryDiv.innerHTML = `
+                    <h2>${category.replace('-', ' ')}</h2>
+                    <div class="image-grid">
+                        ${images.map(image => `
+                            <div class="image-item" onclick="openModal('images/${category}/${image}')">
+                                <img src="images/${category}/${image}" alt="${image}" loading="lazy">
+                                <div class="image-name">${image.replace('.jpg', '')}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        // Modal functionality
+        // aaaa
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = 'block';
+            modalImg.src = imageSrc;
+        }
+
+        // Close modal
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.getElementById('imageModal').style.display = 'none';
+            }
+        });
+
+        // Initialize the image browser
+        generateImageBrowser();
+    </script>
+</body>
+</html>
