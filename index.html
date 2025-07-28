@@ -170,37 +170,34 @@
         // Image catalog organized by category
         const imageCategories = {
             'case': [
-                'case_01.jpg', 'case_02.jpg', 'case_03.jpg', 'case_04.jpg',
-                'case_05.jpg', 'case_06.jpg', 'case_07.jpg', 'case_08.jpg'
+                'case_01.png', 'case_02.png', 'case_03.png', 'case_04.png',
+                'case_05.png', 'case_06.png', 'case_07.png', 'case_08.png'
             ],
             'cpu': [
-                'am4_01.jpg', 'am4_02.jpg', 'am4_03.jpg', 'am5_01.jpg',
-                'am5_02.jpg', 'am5_03.jpg', 'lga1151_01.jpg', 'lga1151_02.jpg',
-                'lga1700_01.jpg', 'lga1700_02.jpg'
+                'am4_01.png', 'am4_02.png', 'am4_03.png', 'am5_01.png',
+                'am5_02.png', 'am5_03.png', 'lga1151_01.png', 'lga1151_02.png',
+                'lga1700_01.png', 'lga1700_02.png'
             ],
             'memory': [
-                'ddr4_01.jpg', 'ddr4_02.jpg', 'ddr4_03.jpg', 'ddr4_04.jpg',
-                'ddr5_01.jpg', 'ddr5_02.jpg', 'ddr5_03.jpg', 'ddr5_04.jpg'
+                'ddr4_01.png', 'ddr4_02.png', 'ddr4_03.png', 'ddr4_04.png',
+                'ddr5_01.png', 'ddr5_02.png', 'ddr5_03.png', 'ddr5_04.png'
             ],
             'motherboard': [
-                'am4_01.jpg', 'am4_02.jpg', 'am4_03.jpg', 'am5_01.jpg',
-                'am5_02.jpg', 'am5_03.jpg', 'lga1151_01.jpg', 'lga1151_02.jpg',
-                'lga1151_03.jpg', 'lga1700_01.jpg', 'lga1700_02.jpg', 'lga1700_03.jpg'
+                'am4_01.png', 'am4_02.png', 'am4_03.png', 'am5_01.png',
+                'am5_02.png', 'am5_03.png', 'lga1151_01.png', 'lga1151_02.png',
+                'lga1151_03.png', 'lga1700_01.png', 'lga1700_02.png', 'lga1700_03.png'
             ],
             'power-supply': [
-                'psu_01.jpg', 'psu_02.jpg', 'psu_03.jpg', 'psu_04.jpg',
-                'psu_05.jpg', 'psu_06.jpg'
+                'psu_01.png', 'psu_02.png', 'psu_03.png', 'psu_04.png',
+                'psu_05.png', 'psu_06.png'
             ],
             'video-card': [
-                'nvidia_01.jpg', 'nvidia_02.jpg', 'nvidia_03.jpg', 'nvidia_04.jpg',
-                'nvidia_05.jpg', 'nvidia_06.jpg', 'nvidia_07.jpg', 'radeon_01.jpg',
-                'radeon_02.jpg', 'radeon_03.jpg', 'radeon_04.jpg', 'radeon_05.jpg'
+                'nvidia_01.png', 'nvidia_02.png', 'nvidia_03.png', 'nvidia_04.png',
+                'nvidia_05.png', 'nvidia_06.png', 'nvidia_07.png', 'radeon_01.png',
+                'radeon_02.png', 'radeon_03.png', 'radeon_04.png', 'radeon_05.png'
             ],
             'laptop': [
-                'laptop_01.jpg', 'laptop_02.jpg', 'laptop_03.jpg', 'laptop_04.jpg', 'laptop_05.jpg',
-                'laptop_06.jpg', 'laptop_07.jpg', 'laptop_08.jpg', 'laptop_09.jpg', 'laptop_10.jpg', 'laptop_11.jpg',
-                'macbook_02.jpg', 'macbook_03.jpg', 'macbook_04.jpg', 'macbook_05.jpg',
-                'macbook_07.jpg', 'macbook_08.jpg'
+                'macbook_01.png', 'macbook_06.png'
             ]
         };
 
@@ -222,7 +219,7 @@
                         ${images.map(image => `
                             <div class="image-item" onclick="openModal('images/${category}/${image}')">
                                 <img src="images/${category}/${image}" alt="${image}" loading="lazy">
-                                <div class="image-name">${image.replace('.jpg', '')}</div>
+                                <div class="image-name">${image.replace('.jpg', '').replace('.png', '')}</div>
                             </div>
                         `).join('')}
                     </div>
